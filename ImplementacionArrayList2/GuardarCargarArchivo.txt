@@ -1,0 +1,60 @@
+int main(void)
+{
+    FILE *f;
+    int i;
+    int cantidad;
+    Employee* aux;
+    Employee* p0 = newEmployee(14, "JUAN0" ,"LOPEZ", 133.22,5);
+    Employee* p1 = newEmployee(14, "JUAN1" ,"LOPEZ", 233.22,5);
+    Employee* p2 = newEmployee(14, "JUAN2" ,"LOPEZ", 333.22,5);
+    Employee* p3 = newEmployee(14, "JUAN3" ,"LOPEZ", 433.22,5);
+    Employee* p4 = newEmployee(14, "JUAN4" ,"LOPEZ", 533.22,5);
+
+    ArrayList* lista = al_newArrayList();
+
+    lista->add(lista, p0);
+    lista->add(lista, p1);
+    lista->add(lista, p2);
+    lista->add(lista, p3);
+    lista->add(lista, p4);
+
+    f = fopen("Personas.dat", "wb");
+    if(f != NULL)
+    {
+        cantidad = lista->len(lista);
+        for(i=0; i< cantidad; i++)
+        {
+            fwrite((Employee*)lista->get(lista, i), sizeof(Employee), 1, f);
+        }
+
+        fclose(f);
+
+        printf("Archivo guardado con exito\n\n");
+    }
+
+    ArrayList *lista2 = al_newArrayList();
+
+    f = fopen("Personas.dat", "rb");
+    if(f!=NULL)
+    {
+        while(!feof(f))
+        {
+
+            aux = (Employee*)malloc(sizeof(Employee));
+            if(aux !=NULL)
+            {
+              if(fread(aux, sizeof(Employee), 1, f)==1)
+                lista2->add(lista2, aux);
+            }
+        }
+        fclose(f);
+
+         printf("Archivo levantado con exito\n\n");
+    }
+
+     printf("Muestro empleados\n\n");
+
+    printArrayListEmployee(lista2);
+
+    return 0;
+}
